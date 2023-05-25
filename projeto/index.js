@@ -1,23 +1,26 @@
-import express from 'express';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-const handlebars = require('handlebars');
+const express = require('express')
+const { engine } = require ('express-handlebars');
 
-
+const app = express();
 
 //Config
     //Template Engine
-        app.engine('handlebars', handlebars({
-            defaultLayout:'main' //O layout main será o template padrão que estará dentro da pasta views/layout
-        }))
-        app.set('view engine', 'handlebars');
-//Nas duas linhas acima do codigo estamos configurando o templante
+    app.engine('handlebars', engine());
+        app.set("view engine", "handlebars")
+        app.set('views', 'views');
+
     //Conexão com o banco de dados MySql;
     const Sequelize = require('sequelize');
     const sequelize = new Sequelize('sistemadecadastro','root', '3003',{
         host:"localhost",
-        dialect:'mysql',
+        dialect:'mysql'
     });
+
+//Rotas
+
+    app.get('/cad', function (req, res){
+        res.render('formulario');
+    })
 
 
 app.listen(8081, function () {
