@@ -1,9 +1,8 @@
 const express = require('express')
 const { engine } = require ('express-handlebars');
 const bodyParser = require('body-parser')
-
 const app = express();
-
+const Post = require('./Models/Post');
 //Config
     //Template Engine
     app.engine('handlebars', engine());
@@ -12,21 +11,35 @@ const app = express();
     //Body Parser
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(bodyParser.json());
-    //Conexão com o banco de dados MySql;
-    const Sequelize = require('sequelize');
-    const sequelize = new Sequelize('sistemadecadastro','root', '3003',{
-        host:"localhost",
-        dialect:'mysql'
-    });
+
 
 //Rotas
+    
+    app.get('/', (req, res) =>{
+        //Passando os dados da tabela para a pagina Home
+        Post.findAll().then(function(posts){
+            res.render('home', {
+                posts: posts
+            });
+        });
+        
+    });
 
     app.get('/cad', function (req, res){
         res.render('formulario');
     });
+
     app.post('/add', function (req, res){
-        res.send("Texto: "+req.body.titulo+"</br>conteudo "+req.body.conteudo);
+       Post.create({
+        titulo: req.body.titulo,
+        conteudo: req.body.conteudo
+       }).then(function (){ //Caso ocorra tudo certo
+            res.redirect("/");
+       }).catch(function (erro){//Caso haja erro
+        res.send("Houve um erro: " + erro)
+       })
     });
+    
 
 
 app.listen(8081, function () {
