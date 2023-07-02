@@ -8,7 +8,7 @@ Postagem é uma aplicação back-end que consiste em publicações de postagem, 
 # Tecnologias utilizadas
 ## Back end
 - Javascript
-- MongoDB
+- MySQL
 
 ## Dependencias
 - Express
